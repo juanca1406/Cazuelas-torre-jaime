@@ -738,3 +738,14 @@ def pdf(request, producto_id):
     p.save()
 
     return response
+
+
+@login_required
+def tomar_pedidos(request):
+    categoria = Categoria.objects.get(categoria='Bebidas')
+    productos = Producto.objects.filter(categoria=categoria)
+    return render(
+        request,
+        'panel/tomar_pedidos.html',
+        context={'productos': productos}
+    )

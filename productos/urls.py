@@ -39,4 +39,5 @@ urlpatterns = [
     path('pdf/<int:producto_id>', views.pdf, name="pdf"),
     path('pdf_carrito/', views.pdf_carrito, name="pdf_carrito"),
     path('contactos/', views.contactos, name="contactos"),
+    path('tomar_pedidos/', views.tomar_pedidos, name="tomar_pedidos"),
 ]

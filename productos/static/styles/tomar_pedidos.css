@@ -1,0 +1,42 @@
+.ordenar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+}
+
+.boton {
+    height: 10px;
+    top: -18px;
+
+}
+
+.content1 button {
+    width: 50px;
+    position: absolute;
+    left: 85%;
+    height: 100%;
+}
+
+.content1 span {
+    width: 50px;
+    position: absolute;
+    left: 75%;
+
+}
+
+.stat {
+    border-right: 1px solid grey;
+}
+
+.content2 span {
+    width: 50px;
+    position: absolute;
+    left: 90%;
+
+}
+
+/* scroll */
+.scroll {
+    overflow-y: auto;
+    max-height: 450px;
+}

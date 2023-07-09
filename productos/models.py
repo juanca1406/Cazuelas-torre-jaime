@@ -39,3 +39,11 @@ class Pedido(models.Model):
 
     def subtotal(self):
         return self.producto.precio * self.cantidad
+
+
+class Ventas(models.Model):
+    producto = models.CharField(max_length=300)
+    precio = models.FloatField()
+    imagen = models.ImageField(upload_to="ventas", null=True)
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    stock = models.IntegerField()
