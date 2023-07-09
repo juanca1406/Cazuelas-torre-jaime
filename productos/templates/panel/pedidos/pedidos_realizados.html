@@ -1,0 +1,66 @@
+{% extends 'panel/admin.html' %}
+
+{% block content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Pedidos</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <a href="{% url 'productos:pedidos' %}"><div class="btn-group me-3">
+                <button type="button" class="btn btn-sm btn-info">Pedidos pediente
+                    <span class="badge text-bg-dark">{{numerop}}</span>
+
+                </button>
+            </div></a>
+            
+        </div>
+    </div>
+
+    <center><h1>Pedidos realizados</h1></center>
+    <div class="table-responsive small">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">Orden</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Dirección</th>
+                    <th scope="col">Celular</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Detalles</th>
+            </thead>
+            {% for pedido in entity %}
+            <tbody>
+                <tr>
+                    <td>{{pedido.carrito_id}}</td>
+                    <td>{{pedido.carrito__nombre}}</td>
+                    <td>{{pedido.carrito__direccion}}</td>
+                    <td>{{pedido.carrito__celular}}</td>
+                    <td>{{pedido.carrito__fecha}}</td>
+                    <td><button
+                        class="btn btn-sm btn-success">realizado
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+                            <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+                            <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+                        </svg>
+                    </button></td>
+                    <td><a href="{% url 'productos:detalles' pedido.carrito_id %}"><button
+                                class="btn btn-sm btn-secondary">Ver detalles
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
+                                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                                    <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
+                                  </svg>        
+                    </button></a></td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+        <center>
+            <div>{% include 'panel/producto/paginator.html' %}</div>
+        </center>
+    </div>
+</main>
+</div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,71 @@
+{% extends 'panel/admin.html' %}
+
+{% block content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Agregar Productos</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+                <a href="{% url 'productos:productos' %}"><button type="button"
+                        class="btn btn-sm btn-outline-secondary">Regresar</button></a>
+            </div>
+        </div>
+
+    </div>
+
+    <h2>Formulario</h2>
+    <form novalidate action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row g-3">
+            <div class="col-sm-6">
+                <label for="id_producto" class="form-label">Producto</label>
+                <input type="text" value="{{ form.instance.producto }}" name="producto" class="form-control" required
+                    id="id_producto">
+            </div>
+
+            <div class="col-sm-6">
+                <label for="id_precio" class="form-label">Precio</label>
+                <input type="number" value="{{ form.instance.precio|floatformat:"-2" }}" name="precio" class="form-control" required id="id_precio">
+
+            </div>
+
+            <div class="col-md-5">
+                <label for="id_categoria" class="form-label">Categoria</label>
+                <select class="form-select" name="categoria" required id="id_categoria">
+                    <option value="1" {% if form.instance.categoria_id == 1 %}selected{% endif %}>Cazuela</option>
+                    <option value="2" {% if form.instance.categoria_id == 2 %}selected{% endif %}>Bebidas</option>
+                </select>
+            </div>
+            <hr>
+            <div class="form-row field-imagen">
+                <div>
+                    <label for="id_imagen">Seleccionar imagen:</label>
+                    <input type="file" name="imagen" accept="image/*" id="id_imagen">
+                    <div class="imagen">
+                        {% if producto.imagen %}
+                       <img src="{{ producto.imagen.url }}" alt="Imagen actual">
+                        {% else %}
+                        <p>No hay imagen disponible.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+   
+
+    
+
+        <div class="d-grid gap-2 col-2 mx-auto">
+            <input class="btn btn-sm btn-primary btn-lg" value="Actualizar" type="submit">
+        </div>
+    </form>
+
+</main>
+</div>
+</div>
+
+
+{% endblock content %}

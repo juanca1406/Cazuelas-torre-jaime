@@ -1,0 +1,65 @@
+{% extends 'panel/admin.html' %}
+
+{% block content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Detalle de la venta</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+                <a href="{% url 'productos:pedidos' %}"><button type="button" class="btn btn-sm btn-outline-secondary">Regresar</button></a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-4">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <strong>Detalle de la compra</strong>
+                </div>
+                <div class="card-body">
+                    <p><strong>Fecha: {{detalles.carrito.fecha}}</strong><strong class="col-md-1"></strong></p>
+                    <p><strong>Nombre cliente: {{detalles.carrito.nombre}}</strong></p>
+                    <p><strong>Direccion: {{detalles.carrito.direccion}}</strong></p>
+                    <p><strong>celular: {{detalles.carrito.celular}}</strong></p>
+                    <p><strong>Total: {{total}}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-8">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       {% for detalles in carrito %}
+                        <tr>
+                            <td>{{detalles.producto}}</td>
+                            <td>{{detalles.producto.precio}}</td>
+                            <td>{{detalles.cantidad}}</td>
+                            <td>{{detalles.subtotal}}</td>
+                        </tr>
+                       
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+            <a href="{% url 'productos:pdf' detalles.id %}" class="btn btn-sm btn-outline-info">Imprimir recibo PDF</a>
+        </div>
+       
+    </div>
+    </form>
+</main>
+</div>
+</div>
+
+{% endblock content %}

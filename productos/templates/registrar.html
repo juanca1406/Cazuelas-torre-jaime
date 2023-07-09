@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<br><br><br><br><br><br><br><br>
+<script>
+    function confirmacion() {
+        var respuesta = confirm("¿Desea confirmar su pedido?");
+        if (respuesta == true) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+</script>
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <h4>Detalles del cliente</h4>
+                    <input name="nombre" id="nombre" type="text" class="form-control" placeholder="Nombre"
+                        aria-label="Username" required>
+                    <br>
+                    <input name="direccion" id="direccion" type="text" class="form-control" placeholder="Dirección"
+                        aria-label="Username" required>
+                    <br>
+                    <input name="celular" id="celular" type="number" class="form-control" placeholder="Celular"
+                        aria-label="Username" required>
+                    <br>
+                    <input name="estado" id="estado" value="1" type="hidden" class="form-control"
+                        aria-label="Username" >
+                    <div class="form-group">
+                        {% if carrito %}
+                        <button style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .95rem;" class="btn btn-danger btn-lg" type="submit" name="btnAccion"
+                                value="proceder" onclick="return confirmacion()">Realizar pedido</button>
+                        {% else %}
+                        <div class="alert alert-danger" role="alert">
+                            !Tu carrito esta vacio <a href="{% url 'productos:index' %}" class="alert-link">Volver a la
+                                tienda</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="col-6">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="product-thumbnail">Producto</th>
+                                <th class="product-price">Cantidad</th>
+                                <th class="product-price">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if carrito %}
+                            {% for producto in carrito %}
+                            <tr>
+                                <td class="">{{producto.producto}}</td>
+                                <td class="">{{producto.cantidad}}</td>
+                                <td class="">{{producto.subtotal_formateado}}</td>
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                            <tr>
+                                <td colspan="3"></td>
+                                <td colspan="2">
+                                    <div style="left: -120px">
+                                        <p class="h3" id="total">total:{{total_formateado}}</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                      
+                        {% endif %}
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    </div>
+</main>
+
+
+{% endblock content %}

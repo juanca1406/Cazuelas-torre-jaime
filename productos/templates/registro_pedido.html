@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cazuelas torre jaime</title>
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'icono/icono.jpeg' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'styles/main_styles.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'styles/responsive.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+        <link href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.theme.default.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/animate.css' %}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        
+      </head>
+<div class="top_nav">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="top_nav_left">Cazuelas torre juan</div>
+					</div>
+					<div class="col-md-6 text-right">
+						<div class="top_nav_right">
+							<ul class="top_nav_menu">
+								<!-- Currency / Language / My Account -->
+								
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+        <div class="main_nav_container">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-right">
+          <div class="logo_container">
+          <a href=""><img src="../img/icono.jpeg" alt=""> Cazuelas <span> torrejaime</span></a>
+          </div>
+          <nav class="navbar">
+            <ul class="navbar_menu">
+              <li><a href="{% url 'productos:index' %}">Regresar a la tienda</a></li>
+            </ul>
+            <div class="hamburger_container">
+              <i class="fa fa-bars" aria-hidden="true"></i>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+<br>
+<h3 class="text-center">Gracias por hacer tu pedido</h3>
+<br>  
+
+<div class="container">
+<div class="row">
+    <div class="col-12 col-md-4">
+        <div class="card mb-3">
+            <div class="card-header">
+                <strong>Regresar a la tienda</strong>
+            </div>
+            
+            <div class="card-body">
+                <p><strong>Fecha: {{pedidor.carrito.fecha}}</strong><strong class="col-md-1"></strong></p>
+                <p><strong>Nombre cliente: {{pedidor.carrito.nombre}}</strong></p>
+                <p><strong>Dirección: {{pedidor.carrito.direccion}}</strong></p>
+                <p><strong>Celular: {{pedidor.carrito.celular}}</strong></p>
+                <p><strong>Total: {{total}}</strong></p>
+            </div>
+        
+        </div>
+    </div>
+    <div class="col-12 col-md-8">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {% for cliente in pedidores %}
+                    <tr>
+                        <td>{{cliente.producto}}</td>
+                        <td>{{cliente.producto.precio}}</td>
+                        <td>{{cliente.cantidad}}</td>
+                        <td>{{cliente.subtotal}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="{% url 'productos:pdf_carrito' %}" class="btn btn-info">Imprimir recibo PDF</a>
+    </div>
+   
+</div>
+</div>

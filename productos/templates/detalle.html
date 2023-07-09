@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<br><br><br><br><br><br><br>
+<main>
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="product-thumbnail">Producto</th>
+                        <th class="product-name">Precio</th>
+                        <th class="product-price">Cantidad</th>
+                        <th class="product-price">Subtotal</th>
+                        <th class="product-price">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                    {% for product in carrito %}                 
+                    <tr>
+                        <td>{{product.producto}}</td>
+                        <td>{{product.precio_formateado}}</td>
+                        <td>
+                            <input type="number" size="7" min="1" max="50"name="cantidad_{{ product.id }}" value="{{ product.cantidad }}" min="1" onchange="modificarCantidad({{ product.id }}, this.value)">
+                        </td>
+                        <td>{{product.subtotal_formateado}}</td>
+                        <td>
+                            <a href="{% url 'productos:eliminar' product.id %}">
+                                <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}   
+                    {% if carrito %}
+                      <tr>
+                        <td colspan="3"></td>
+                        <td colspan="2">
+                           <div class="total">
+                             <p class="h3" id="total">Total: {{total_formateado}}</p>
+                           </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td>
+                            <div class="alert alert-danger" role="alert">
+                                !Tu carrito esta vacio <a href="{% url 'productos:index' %}" class="alert-link">Volver a la tienda</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>    
+        </div>
+        {% if carrito %}
+        <div class="row">
+            <a href="{% url 'productos:registrar' %}">
+                <div class="pedido">
+                    <button class="btn btn-danger">Realizar Pedido</button>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</main>
+<script>
+    function modificarCantidad(producto_id, nueva_cantidad) {
+        fetch(`/modificar_cantidad/${producto_id}/${nueva_cantidad}`, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+          }
+        })
+        .then(response => {
+          location.reload(); // Recargar la página después de la actualización
+        })
+        .catch(error => {
+          console.error('Error al actualizar la cantidad:', error);
+        });
+      }
+</script>
+
+
+{% endblock content %}

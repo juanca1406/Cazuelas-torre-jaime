@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br><br><br><br>
+<div class="new_arrivals">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <div class="section_title new_arrivals_title">
+                    <h2>Bienvenido Cazuelas torre jaime</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center">
+            <div class="col text-center">
+                <div class="new_arrivals_sorting">
+                    <ul class="arrivals_grid_sorting clearfix button-group filters-button-group">
+                        <a href="{% url 'productos:index' %}">
+                            <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center "
+                                data-filter="{% url 'productos:index' %}">Cazuelas
+                            </li>
+                        </a>
+
+                        <a href="{% url 'productos:bebidas' %}">
+                            <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center "
+                                data-filter="{% url 'productos:bebidas' %}">Bebidas
+                            </li>
+                        </a>
+
+                        <a href="{% url 'productos:adicciones' %}">
+                            <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center active is-checked"
+                                data-filter="{% url 'productos:adicciones' %}">Adicciones
+                            </li>
+                        </a>
+                        <a href="{% url 'productos:todos' %}">
+                            <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center"
+                                data-filter="{% url 'productos:todos' %}">Todos
+                            </li>
+                        </a>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="product-grid" data-isotope='{ "itemSelector": ".product-item", "layoutMode": "fitRows" }'>
+                    {% for producto in productos %}
+                    <div class="product-item men">
+                        <div class="product discount product_filter">
+                            <div class="product_image">
+                                <img src="{{producto.imagen.url}}" alt="">
+                            </div>
+                            <div class="favorite favorite_left"></div>
+                            <div class="product_info">
+                                <h6 class="product_name">{{producto.producto}}</h6>
+                                <div class="product_price">$ {{producto.precio}}</div>
+                                {% if producto.stock == 1 %}
+                                <div class="red_button">
+                                    <a href="{% url 'productos:agregar' producto.id %}" class="agregar-carrito"><button
+                                            class="btn btn-danger">Agregar <i class="fa fa-shopping-cart"
+                                                aria-hidden="true"></i></button></a>
+                                </div>
+                                {% else %}
+                                <div class="red_button">
+                                    <button class="btn btn-warning">Agotado</button>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                        $(document).ready(function () {
+                            $('.agregar-carrito').click(function (event) {
+                                event.preventDefault();
+
+                                var url = $(this).attr('href');
+
+                                $.ajax({
+                                    url: url,
+                                    type: 'GET',
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        $('#cantidad-carrito').text(data.cantidad_total);
+                                    },
+                                    error: function (xhr, textStatus, errorThrown) {
+                                        // Maneja los errores de la solicitud AJAX
+                                        alert('Error al agregar el producto al carrito.');
+                                    }
+                                });
+                            });
+                        });
+                    </script>
+                    {% endblock content %}

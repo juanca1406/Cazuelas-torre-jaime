@@ -1,0 +1,51 @@
+{% extends 'panel/admin.html' %}
+
+{% block content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">!!!Alerta</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+                <a href="{% url 'productos:categoria' %}"><button type="button"
+                        class="btn btn-sm btn-outline-secondary">Regresar</button></a>
+            </div>
+        </div>
+
+    </div>
+
+    <h2>Eliminar categoria</h2>
+    <br>
+    <form novalidate action="" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        {% csrf_token %}
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Seguro que quieres eliminar esta categoria llamada: {{eliminar.categoria}}</h4>
+            <p>si eliminas la categoria se elimina permanentemente.</p>
+            <hr>
+            <p class="mb-0">¿estas seguro?</p>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="d-grid gap-2 col-2 mx-auto">
+            <input class="btn btn-sm btn-danger btn-lg" value="Eliminar categoria" type="submit">
+        </div>
+    </form>
+
+    <script>
+        function validateForm() {
+            var producto = document.getElementById("id_producto").value;
+
+
+            if (producto === '') {
+                alert("Todos los campos son obligatorios");
+                return false;
+            }
+        }
+    </script>
+
+</main>
+</div>
+</div>
+
+{% endblock content %}

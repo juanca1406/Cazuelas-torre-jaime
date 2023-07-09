@@ -1,0 +1,54 @@
+{% extends 'panel/admin.html' %}
+
+{% block content %}
+
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Configuración</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+                <a href="{% url 'productos:productos' %}"><button type="button"
+                        class="btn btn-sm btn-outline-secondary">Regresar</button></a>
+            </div>
+        </div>
+
+    </div>
+
+    <h2>Bienvenido: {{user.username}}</h2>
+    <br>
+    <div class="row g-3">
+        <div class="col-sm-6">
+            <label for="id_producto" class="form-label">Nombre</label>
+            <input type="text" class="form-control" value="{{user.first_name}}">
+            <hr>
+            <button class="btn btn-sm btn-secondary">Cambiar el Nombre</button>
+        </div>
+
+        <div class="col-sm-6">
+            <label for="id_precio" class="form-label">Apellido</label>
+            <input type="text" class="form-control" value="{{user.last_name}}">
+        </div>
+
+        <div class="col-sm-3">
+            <label for="id_precio" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" value="{{user.password}}">
+        </div>
+        <div class="col-sm-3">
+            <label for="id_precio" class="form-label">correo electrónico</label>
+            <input type="text" class="form-control" value="{{user.email}}">
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="d-grid gap-2 col-2 mx-auto">
+        <input class="btn btn-sm btn-primary btn-lg" value="Guardar Producto" type="submit">
+    </div>
+    </form>
+
+
+</main>
+</div>
+</div>
+{% endblock content %}

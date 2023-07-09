@@ -1,0 +1,80 @@
+{% extends 'panel/admin.html' %}
+
+{% block content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Agregar Productos</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+                <a href="{% url 'productos:productos' %}"><button type="button"
+                        class="btn btn-sm btn-outline-secondary">Regresar</button></a>
+            </div>
+        </div>
+
+    </div>
+
+    <h2>Registra un nuevo producto</h2>
+    <br>
+    <form novalidate action="{% url 'productos:agregarp' %}" method="post" enctype="multipart/form-data"
+        onsubmit="return validateForm()">
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-sm-6">
+                <label for="id_producto" class="form-label">Producto</label>
+                <input type="text" name="producto" class="form-control" placeholder="Producto nuevo" id="id_producto">
+            </div>
+
+            <div class="col-sm-6">
+                <label for="id_precio" class="form-label">Precio</label>
+                <input type="number" name="precio" placeholder="Precio del producto" class="form-control" id="id_precio">
+            </div>
+
+            <div class="col-md-5">
+                <label for="id_categoria" class="form-label">Categoría</label>
+                <select class="form-select" name="categoria" id="id_categoria">
+                    <option value="1">Cazuela</option>
+                    <option value="2">Bebidas</option>
+                    <option value="3">Adicciones</option>
+                </select>
+            </div>
+            <div class="col-sm-6">
+                <input type="hidden" value="1" name="stock" class="form-control" id="id_stock" readonly>
+
+            </div>
+            <hr>
+            <div class="form-row field-imagen">
+                <div>
+                    <label for="id_imagen">Seleccionar imagen:</label>
+                    <input type="file" name="imagen" accept="image/*" id="id_imagen">
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="d-grid gap-2 col-2 mx-auto">
+            <input class="btn btn-sm btn-primary btn-lg" value="Guardar Producto" type="submit">
+        </div>
+    </form>
+
+    <script>
+        function validateForm() {
+            var producto = document.getElementById("id_producto").value;
+            var precio = document.getElementById("id_precio").value;
+            var categoria = document.getElementById("id_categoria").value;
+            var stock = document.getElementById("id_stock").value;
+            var imagen = document.getElementById("id_imagen").value;
+
+            if (producto === '' || precio === '' || categoria === '' || stock === '' || imagen === '') {
+                alert("Todos los campos son obligatorios");
+                return false;
+            }
+        }
+    </script>
+
+</main>
+</div>
+</div>
+
+{% endblock content %}
