@@ -11,12 +11,12 @@ from reportlab.lib.pagesizes import letter
 from datetime import datetime
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Producto, Cliente, Pedido, Categoria
+from .models import Producto, Cliente, Pedido, Categoria, Ventas
 import locale
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from .forms import ProductoForm, CategoriaForm
+from .forms import ProductoForm, CategoriaForm, VentasForm
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
 import datetime
@@ -491,6 +491,7 @@ def stock(request, producto_id):
 
 @login_required
 def agregarp(request):
+    categorias = Categoria.objects.all()
     if request.method == 'POST':
         producto = Producto(
             producto=request.POST.get('producto'),
@@ -503,7 +504,7 @@ def agregarp(request):
         return HttpResponseRedirect('/productos/')
     else:
         producto = ProductoForm()
-    return render(request, 'panel/producto/agregardiseño.html', context={'producto': producto})
+    return render(request, 'panel/producto/agregardiseño.html', context={'producto': producto, 'categorias': categorias})
 
 
 @login_required
@@ -742,10 +743,114 @@ def pdf(request, producto_id):
 
 @login_required
 def tomar_pedidos(request):
-    categoria = Categoria.objects.get(categoria='Bebidas')
-    productos = Producto.objects.filter(categoria=categoria)
+    mostrar = Ventas.objects.all()
+    carrito = request.session.get('inventario', [])
+    carrito_ids = [item['producto_id']
+                   for item in carrito if isinstance(item, dict)]
+    carritos = Ventas.objects.filter(pk__in=carrito_ids)
+
+    total = 0
+
+    # Agregar la cantidad y subtotal a cada producto del carrito
+    for producto in carritos:
+        item = next((item for item in carrito if isinstance(
+            item, dict) and item['producto_id'] == producto.id), None)
+        if item:
+            producto.cantidad = item['cantidad']
+            producto.subtotal = producto.precio * producto.cantidad
+            total += producto.subtotal
+            locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
+
+            # Formatear el precio y el subtotal con puntos como separadores de miles
+            producto.precio_formateado = locale.format_string(
+                '%.0f', producto.precio, grouping=True)
+            producto.subtotal_formateado = locale.format_string(
+                '%.0f', producto.subtotal, grouping=True)
+        else:
+            producto.cantidad = 0
+            producto.subtotal = 0
+
+    total_formateado = locale.format_string('%.0f', total, grouping=True)
+
+    return render(request, 'panel/inventario/tomar_pedidos.html', {'carritos': carritos, 'total': total,
+                                                                   'total_formateado': total_formateado, 'mostrar': mostrar})
+
+
+@login_required
+def mostrar(request):
+    mostrar = Ventas.objects.all()
     return render(
         request,
-        'panel/tomar_pedidos.html',
-        context={'productos': productos}
+        'panel/inventario/mostrar.html',
+        context={'mostrar': mostrar}
     )
+
+
+@login_required
+def agregar_productos(request):
+    categorias = Categoria.objects.all()
+    if request.method == 'POST':
+        agregar = VentasForm(request.POST, request.FILES)
+        if agregar.is_valid():
+            agregar.save()
+            HttpResponse('/mostrar/')
+    else:
+        agregar = VentasForm(request.POST, request.FILES)
+
+    return render(
+        request,
+        'panel/inventario/agregar_productos.html',
+        context={'agregar': agregar, 'categorias': categorias}
+    )
+
+
+@login_required
+def agregars(request, producto_id):
+    producto = get_object_or_404(Ventas, id=producto_id)
+    carrito = request.session.get('inventario', [])
+
+    for item in carrito:
+        if item['producto_id'] == producto_id:
+            cantidad_actual = item['cantidad']
+            cantidad_maxima = producto.stock
+
+            if cantidad_actual + 1 > cantidad_maxima:
+                item['cantidad'] = cantidad_maxima
+            else:
+                item['cantidad'] += 1
+            break
+    else:
+        item = {'producto_id': producto_id, 'cantidad': 1}
+        carrito.append(item)
+
+    request.session['inventario'] = carrito
+    print(carrito)
+    return JsonResponse({})
+
+
+@login_required
+def modificars(request, producto_id, nueva_cantidad):
+    carrito = request.session.get('inventario', [])
+
+    for item in carrito:
+        if item['producto_id'] == producto_id:
+            item['cantidad'] = nueva_cantidad
+            break
+
+    request.session['inventario'] = carrito
+
+    request.session.modified = True  # Indica que la sesión ha sido modificada
+    print(carrito)
+    return redirect('/tomar_pedidos')
+
+
+@login_required
+def eliminars(request, producto_id):
+    carrito = request.session.get('inventario', [])
+
+    for item in carrito:
+        if item['producto_id'] == producto_id:
+            carrito.remove(item)
+            break
+    request.session['inventario'] = carrito
+    return redirect('/tomar_pedidos/')

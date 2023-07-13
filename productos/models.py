@@ -47,3 +47,4 @@ class Ventas(models.Model):
     imagen = models.ImageField(upload_to="ventas", null=True)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     stock = models.IntegerField()
+    limited = models.BooleanField(default=False)

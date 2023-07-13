@@ -1,0 +1,207 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'icono/icono.jpeg' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/tomar_pedidos.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/main_styles.css' %}">
+    <link href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <header class="py-3 mb-3 border-bottom">
+        <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
+            <div class="dropdown">
+                <a href="#"
+                    class="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-dark text-decoration-none dropdown-toggle"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="{% static 'C:\Users\user\Documents\proyectos de django\Cazuelas torre jaime\productos\static\icono\icono.jpeg' %}"
+                        width="30px" alt="producto 1">
+                </a>
+                <ul class="dropdown-menu text-small shadow">
+                    <li><a class="dropdown-item" href="{% url 'productos:agregar_productos' %}">Agregar productos</a>
+                    </li>
+                    <li><a class="dropdown-item" href="{% url 'productos:pedidos' %}">Ver los pedidos</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item " href="{% url 'productos:administrador' %}"
+                            aria-current="page">Regresar</a></li>
+                </ul>
+            </div>
+        </div>
+
+    </header>
+
+    <div class="container-fluid pb-3">
+        <div class="d-grid gap-1 ordenar">
+
+            <div class="bg-light border rounded-1">
+                <form class="w-40 me-3 p-3" role="search">
+                    <input type="search" class="form-control" placeholder="Buscar..." aria-label="Search">
+                </form>
+
+                <div class="row row-cols-md-3 g-2 p-2 scroll">
+                    {% for producto in mostrar %}
+                    <div class="col bg-light">
+                        <div class="card">
+                            <img src="{{producto.imagen.url}}" class="card-img-top" alt="">
+                            <div class="card-body">
+                                <h5 class="card-title">{{producto.producto}}</h5>
+                                <p class="card-text">${{producto.precio}}</p>
+                                <div class="boton">
+                                        <button class="btn btn-sm btn-danger agregar-inventario"
+                                            data-producto-id="{{ producto.id }}" data-stock="{{ producto.stock }}">
+                                            Agregar <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                        </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('.agregar-inventario').click(function (event) {
+                        event.preventDefault();
+                        var productoId = $(this).data('producto-id');
+                        var stock = $(this).data('stock');
+                        var cantidad = 1; // Cambiar esto según sea necesario
+            
+                        if (cantidad > stock) {
+                            alert('La cantidad supera el stock disponible.');
+                            return;
+                        }
+            
+                        var url = "{% url 'productos:agregars' 0 %}".replace('0', productoId);
+            
+                        $.ajax({
+                            url: url,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function () {
+                                location.reload();
+                            },
+                            error: function (xhr, textStatus, errorThrown) {
+                                alert('Error al agregar el producto al carrito.');
+                            }
+                        });
+                    });
+                });
+            
+            </script>
+            <div id="navbar-example2" class="bg-light border p-2 rounded-2 ">
+                <table border="1px" class="table">
+                    <tbody>
+                        {% for carrito in carritos %}
+                        <tr>
+                            <td><img src="{{carrito.imagen.url}}" alt="" width="50px"></td>
+                            <td>{{carrito.producto}}</td>
+                            <td>${{carrito.precio}}</td>
+                            <td> <input type="number" size="7" min="1" max="{{ carrito.stock }}"
+                                    name="cantidad_{{ carrito.id }}" value="{{ carrito.cantidad }}"
+                                    onchange="modificarCantidad({{ carrito.id }}, this.value)" readonly>
+                            </td>
+                            <td>${{carrito.subtotal_formateado}}</td>
+                            <td><a href="{% url 'productos:eliminars' carrito.id %}">
+                                    <button class="btn btn-sm btn-secondary">Eliminar</button></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <script>
+                function modificarCantidad(producto_id, nueva_cantidad) {
+                    fetch(`/modificars/${producto_id}/${nueva_cantidad}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        }
+                    })
+                        .then(response => {
+                            location.reload(); // Recargar la página después de la actualización
+                        })
+                        .catch(error => {
+                            console.error('Error al actualizar la cantidad:', error);
+                        });
+                }
+            </script>
+
+            <div class="bg-light border rounded-2 p-2">
+
+                <h3>
+                    <a href=""><img width="35px" src="{% static 'icono/user.jpg' %}" alt=""></a>
+                    Nombre cliente:
+                    <span>1</span>
+                </h3>
+                <hr>
+                <div class="content1">
+                    <h4>Descuento: <span>$0</span>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">+</button>
+                    </h4>
+                </div>
+                <br><br>
+                <div class="content2">
+                    <h4>Subtotal: <span>$0</span></h4>
+                </div>
+                <br><br><br><br><br>
+                <div class="content2">
+                    <h4>Total: <span>${{total_formateado}}</span></h4>
+                </div>
+                <br><br>
+                <section>
+                    <div class="container p-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-3 stat">
+                                        <center><button class="btn btn-sm btn-primary">Limpiar venta</button></center>
+                                    </div>
+                                    <div class="col-3 stat">
+                                        <center><button class="btn btn-sm btn-primary">Pago de contado</button></center>
+                                    </div>
+                                    <div class="col-3 stat">
+                                        <center><button class="btn btn-sm btn-primary">Temporal Mesa</button></center>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Descuento</h1>
+                </div>
+                <div class="modal-body">
+                    <span class="h6">Valor: <input type="number" placeholder="Ingrese Descuento"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.forms',
     'productos.apps.ProductosConfig',
+    'storages',
 
 ]
 
@@ -132,5 +133,16 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'yersonhenao45@gmail.com'
 EMAIL_HOST_PASSWORD = 'niwrkczxueztqzlo'
+
+AWS_ACCESS_KEY_ID = 'AKIA5ER3RDTNGRUT6HUT'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'cazuela'
+AWS_S3_SIGNATURE_NAME = 's3v4',
+AWS_S3_REGION_NAME = 'us-east-2'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_S3_VERITY = True
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

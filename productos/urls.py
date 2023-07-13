@@ -40,4 +40,11 @@ urlpatterns = [
     path('pdf_carrito/', views.pdf_carrito, name="pdf_carrito"),
     path('contactos/', views.contactos, name="contactos"),
     path('tomar_pedidos/', views.tomar_pedidos, name="tomar_pedidos"),
+    path('mostrar/', views.mostrar, name="mostrar"),
+    path('agregar_productos/', views.agregar_productos, name="agregar_productos"),
+    path('agregars/<int:producto_id>', views.agregars, name="agregars"),
+    path('modificars/<int:producto_id>/<int:nueva_cantidad>',
+         views.modificars, name="modificars"),
+    path('eliminars/<int:producto_id>', views.eliminars, name="eliminars"),
+
 ]

@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Producto, Categoria
+from .models import Producto, Categoria, Ventas
 
 
 class ProductoForm(ModelForm):
@@ -16,3 +16,10 @@ class CategoriaForm(ModelForm):
     class Meta:
         model = Categoria
         fields = ("categoria",)
+
+
+class VentasForm(forms.ModelForm):
+
+    class Meta:
+        model = Ventas
+        fields = ("producto", "precio", "imagen", 'categoria', 'stock')

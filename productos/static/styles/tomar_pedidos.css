@@ -13,14 +13,14 @@
 .content1 button {
     width: 50px;
     position: absolute;
-    left: 85%;
+    left: 75%;
     height: 100%;
 }
 
 .content1 span {
     width: 50px;
     position: absolute;
-    left: 75%;
+    left: 60%;
 
 }
 
@@ -31,7 +31,7 @@
 .content2 span {
     width: 50px;
     position: absolute;
-    left: 90%;
+    left: 60%;
 
 }
 
