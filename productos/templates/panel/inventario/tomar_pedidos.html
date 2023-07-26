@@ -56,10 +56,10 @@
                                 <h5 class="card-title">{{producto.producto}}</h5>
                                 <p class="card-text">${{producto.precio}}</p>
                                 <div class="boton">
-                                        <button class="btn btn-sm btn-danger agregar-inventario"
-                                            data-producto-id="{{ producto.id }}" data-stock="{{ producto.stock }}">
-                                            Agregar <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                        </button>
+                                    <button class="btn btn-sm btn-danger"
+                                        data-producto-id="{{ producto.id }}" data-stock="{{ producto.stock }}">
+                                        Agregar <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -67,50 +67,29 @@
                     {% endfor %}
                 </div>
             </div>
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script>
-                $(document).ready(function () {
-                    $('.agregar-inventario').click(function (event) {
-                        event.preventDefault();
-                        var productoId = $(this).data('producto-id');
-                        var stock = $(this).data('stock');
-                        var cantidad = 1; // Cambiar esto según sea necesario
             
-                        if (cantidad > stock) {
-                            alert('La cantidad supera el stock disponible.');
-                            return;
-                        }
-            
-                        var url = "{% url 'productos:agregars' 0 %}".replace('0', productoId);
-            
-                        $.ajax({
-                            url: url,
-                            type: 'GET',
-                            dataType: 'json',
-                            success: function () {
-                                location.reload();
-                            },
-                            error: function (xhr, textStatus, errorThrown) {
-                                alert('Error al agregar el producto al carrito.');
-                            }
-                        });
-                    });
-                });
-            
-            </script>
             <div id="navbar-example2" class="bg-light border p-2 rounded-2 ">
                 <table border="1px" class="table">
                     <tbody>
-                        {% for carrito in carritos %}
+                        {% for carrito in mostrar %}
                         <tr>
-                            <td><img src="{{carrito.imagen.url}}" alt="" width="50px"></td>
-                            <td>{{carrito.producto}}</td>
-                            <td>${{carrito.precio}}</td>
-                            <td> <input type="number" size="7" min="1" max="{{ carrito.stock }}"
-                                    name="cantidad_{{ carrito.id }}" value="{{ carrito.cantidad }}"
-                                    onchange="modificarCantidad({{ carrito.id }}, this.value)" readonly>
+                            <td><img src="" alt="" width="50px"></td>
+                            <td>a</td>
+                            <td>$</td>
+                            <td>
+                                <td>
+                                    <div class="input-group mb-3" style="max-width: 120px;">
+                                      <div class="input-group-prepend">
+                                        <button class="btn btn-outline-primary js-btn-minus" type="button">−</button>
+                                      </div>
+                                      <input type="text" class="form-control text-center" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                                      <div class="input-group-append">
+                                        <button class="btn btn-outline-primary js-btn-plus" type="button">+</button>
+                                      </div>
+                                    </div>
+                                  </td>
                             </td>
-                            <td>${{carrito.subtotal_formateado}}</td>
+                            <td>$</td>
                             <td><a href="{% url 'productos:eliminars' carrito.id %}">
                                     <button class="btn btn-sm btn-secondary">Eliminar</button></a></td>
                         </tr>
@@ -118,22 +97,6 @@
                     </tbody>
                 </table>
             </div>
-            <script>
-                function modificarCantidad(producto_id, nueva_cantidad) {
-                    fetch(`/modificars/${producto_id}/${nueva_cantidad}`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRFToken': '{{ csrf_token }}'
-                        }
-                    })
-                        .then(response => {
-                            location.reload(); // Recargar la página después de la actualización
-                        })
-                        .catch(error => {
-                            console.error('Error al actualizar la cantidad:', error);
-                        });
-                }
-            </script>
 
             <div class="bg-light border rounded-2 p-2">
 

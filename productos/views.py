@@ -744,36 +744,12 @@ def pdf(request, producto_id):
 @login_required
 def tomar_pedidos(request):
     mostrar = Ventas.objects.all()
-    carrito = request.session.get('inventario', [])
-    carrito_ids = [item['producto_id']
-                   for item in carrito if isinstance(item, dict)]
-    carritos = Ventas.objects.filter(pk__in=carrito_ids)
 
-    total = 0
-
-    # Agregar la cantidad y subtotal a cada producto del carrito
-    for producto in carritos:
-        item = next((item for item in carrito if isinstance(
-            item, dict) and item['producto_id'] == producto.id), None)
-        if item:
-            producto.cantidad = item['cantidad']
-            producto.subtotal = producto.precio * producto.cantidad
-            total += producto.subtotal
-            locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
-
-            # Formatear el precio y el subtotal con puntos como separadores de miles
-            producto.precio_formateado = locale.format_string(
-                '%.0f', producto.precio, grouping=True)
-            producto.subtotal_formateado = locale.format_string(
-                '%.0f', producto.subtotal, grouping=True)
-        else:
-            producto.cantidad = 0
-            producto.subtotal = 0
-
-    total_formateado = locale.format_string('%.0f', total, grouping=True)
-
-    return render(request, 'panel/inventario/tomar_pedidos.html', {'carritos': carritos, 'total': total,
-                                                                   'total_formateado': total_formateado, 'mostrar': mostrar})
+    return render(
+        request,
+        'panel/inventario/tomar_pedidos.html',
+        context={'mostrar': mostrar}
+    )
 
 
 @login_required
